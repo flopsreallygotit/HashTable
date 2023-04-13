@@ -1,0 +1,6 @@
+[submodule "Universal"]
+	path = Universal
+	url = git@github.com:flopsreallygotit/Universal.git
+[submodule "List"]
+	path = List
+	url = git@github.com:flopsreallygotit/List.git

@@ -1,0 +1,6 @@
+HashTable/*.o
+Universal/*.o
+List/*.o
+
+Objects
+main
