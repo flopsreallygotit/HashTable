@@ -36,7 +36,7 @@ FASTFLAGS ?= # -Ofast -mavx -mavx2 -mavx512dq
 DIRFLAGS ?= -IUniversal -IList
 
 # Configure sources you need to compile.
-SOURCES  ?= HashTable/main.cpp HashTable/mainUtils.cpp 				\
+SOURCES  ?= HashTable/main.cpp HashTable/mainUtils.cpp				\
 			Universal/universalUtils.cpp Universal/textUtils.cpp	\
 			List/listUtils.cpp 										\
 

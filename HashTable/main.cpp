@@ -2,17 +2,20 @@
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-int main ()
+int main (const int argc, const char **argv)
 {
-    list *List = listConstructor();
+    const char *filename = simpleCommandLineParser(argc, argv);
 
-    char *element = NULL;
-    scanf("%ms", &element);
+    CHECKERROR(filename != NULL && 
+               "Filename is NULL.", 
+               -1);
 
-    list *pointerToNodeWithMyElement = insertAfter(List, element);
-    listDump(List);
+    table *Table = tableConstructor(10, NULL);
 
-    listDestructor(List);
+    // DOTHIS(hashFileWords(filename, Table));
+    // DOTHIS(outputHashTable(filename));
+
+    tableDestructor(Table);
 
     return 0;
 }
