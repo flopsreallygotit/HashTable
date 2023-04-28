@@ -47,13 +47,6 @@ table *tableConstructor (size_t tableSize,
 void tableDestructor (table *Table, 
                       void (*elementDestructor) (elem_t element));
 
-/// @brief Deletes all nodes except of head node of lists in list array.
-/// @param Table Pointer to table struct.
-/// @param elementDestructor Function that deletes element.
-
-void tableReset (table *Table, 
-                 void (*elementDestructor) (elem_t element));
-
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 /// @brief Dumps all table lists.
@@ -78,11 +71,15 @@ bool tableInsert (table *Table, elem_t element);
 
 list *getFileWords (const char *filename);
 
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 /// @brief Puts words in the file in hash table.
 /// @param Words List of words.
 /// @param Table Pointer to table struct.
 
 ISERROR hashFileWords (list *Words, table *Table);
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 /// @brief Outputs size of lists in file for subsequent processing.
 /// @param filename Name of file.

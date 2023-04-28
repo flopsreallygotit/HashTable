@@ -61,23 +61,6 @@ void tableDestructor (table *Table,
     return;
 }
 
-void tableReset (table *Table, 
-                 void (*elementDestructor) (elem_t element))
-{
-    if (Table == NULL)
-        return;
-
-    for (size_t list_idx = 0; list_idx < Table->tableSize; list_idx++)
-    {
-        listDestructor(Table->listArray[list_idx]->next, 
-                       elementDestructor);
-
-        Table->listArray[list_idx]->next = NULL;
-    }
-
-    return;
-}
-
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 void simpleTableDump (table *Table)
@@ -106,7 +89,7 @@ bool tableInsert (table *Table, elem_t element)
 
     if (listFind(Table->listArray[list_idx], element, stringComparator) == NULL)
     {
-        list *elementNodePointer = listInsert(Table->listArray[list_idx], element);
+        node *elementNodePointer = listInsert(Table->listArray[list_idx], element);
 
         CHECKERROR(elementNodePointer != NULL, false);
 
@@ -139,15 +122,14 @@ list *getFileWords(const char *filename)
     int length = 0;
     char *word = NULL;
 
-    list *currentNode = Words;
     char *currentWordPointer = Text->buffer;
 
     while (sscanf(currentWordPointer, "%ms%n", &word, &length) != EOF)
     {
-        currentNode = listInsert(currentNode, word);
+        node *wordPointer = listInsert(Words, word);
 
-        CHECKERROR(currentNode != NULL &&
-                   "Current node can't be NULL pointer.",
+        CHECKERROR(wordPointer != NULL &&
+                   "Can't insert word.",
                    NULL);
 
         currentWordPointer += length;
@@ -157,6 +139,8 @@ list *getFileWords(const char *filename)
 
     return Words;
 }
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ISERROR hashFileWords (list *Words, table *Table)
 {
@@ -168,7 +152,7 @@ ISERROR hashFileWords (list *Words, table *Table)
                "Table can't be NULL pointer.", 
                NULLPOINTER);
 
-    list *currentNode = Words->next;
+    node *currentNode = Words->head->next;
 
     while (currentNode != NULL)
     {
@@ -180,6 +164,8 @@ ISERROR hashFileWords (list *Words, table *Table)
     return NOTERROR;
 }
 
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 ISERROR getStats (const char *filename, table *Table)
 {
     CHECKERROR(filename != NULL &&
@@ -190,11 +176,11 @@ ISERROR getStats (const char *filename, table *Table)
                "Table can't be NULL pointer.", 
                NULLPOINTER);
 
-    FILE *file = fopen(filename, "r");
+    FILE *file = fopen(filename, "w");
 
     for (size_t list_idx = 0; list_idx < Table->tableSize; list_idx++)
         fprintf(file, "%lu\t%lu\n", 
-                list_idx, listSize(Table->listArray[list_idx]));
+                list_idx, Table->listArray[list_idx]->size);
 
     putc('\n', file);
 

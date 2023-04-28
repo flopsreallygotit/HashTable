@@ -16,7 +16,7 @@ int main (const int argc, const char **argv)
                "Words can't be NULL pointer.", 
                -1);
 
-    table *Table = tableConstructor(1009, polynomialRollingHash);
+    table *Table = tableConstructor(1009, constHash);
 
     CHECKERROR(Table != NULL && 
                "Table can't be NULL pointer.", 
@@ -27,8 +27,6 @@ int main (const int argc, const char **argv)
     char *output = stralloccat(filename, ".out");
     DOTHIS(getStats(output, Table));
     free(output);
-
-    tableReset(Table, passDestruction);
 
     listDestructor(Words,  stringDestructor);
 
