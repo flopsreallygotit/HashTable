@@ -28,7 +28,7 @@ CXXFLAGS ?= -ggdb3 -std=c++17 -O0 -Wall -Wextra -Weffc++ 				   	\
 LINKFLAGS ?= -lsfml-graphics -lsfml-window -lsfml-system
 
 # Configure program perfomance boost flags.
-FASTFLAGS ?= # -Ofast -mavx -mavx2 -mavx512dq
+FASTFLAGS ?= -Ofast # -Ofast -mavx -mavx2 -mavx512dq
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -36,14 +36,9 @@ FASTFLAGS ?= # -Ofast -mavx -mavx2 -mavx512dq
 DIRFLAGS ?= -IUniversal -IList
 
 # Configure sources you need to compile.
-SOURCES  ?= HashTable/main.cpp HashTable/mainUtils.cpp				\
-			Universal/universalUtils.cpp Universal/textUtils.cpp	\
-			List/listUtils.cpp 										\
-
-# Configure sources dependencies.
-DEPENDS  ?= HashTable/mainUtils.hpp									\
-			Universal/universalUtils.h Universal/textUtils.h		\
-			List/listUtils.h 										\
+SOURCES  ?= HashTable/main.cpp HashTable/mainUtils.cpp HashTable/hashFuncs.cpp	\
+			Universal/universalUtils.cpp Universal/textUtils.cpp				\
+			List/listUtils.cpp 													\
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -70,7 +65,7 @@ CXXFLAGS += $(DIRFLAGS)
 .PHONY: all
 all: $(EXECUTABLE)
 
-$(EXECUTABLE): $(OBJECTS) $(DEPENDS)
+$(EXECUTABLE): $(OBJECTS)
 	@echo "Making executable from objects;"
 	@$(CXX) $(OBJECTS) -o $@ $(LINKFLAGS)
 	@echo "Done;"

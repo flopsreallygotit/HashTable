@@ -7,15 +7,32 @@ int main (const int argc, const char **argv)
     const char *filename = simpleCommandLineParser(argc, argv);
 
     CHECKERROR(filename != NULL && 
-               "Filename is NULL.", 
+               "Filename can't be NULL pointer.", 
                -1);
 
-    table *Table = tableConstructor(10, NULL);
+    list *Words = getFileWords(filename);
 
-    // DOTHIS(hashFileWords(filename, Table));
-    // DOTHIS(outputHashTable(filename));
+    CHECKERROR(Words != NULL && 
+               "Words can't be NULL pointer.", 
+               -1);
 
-    tableDestructor(Table);
+    table *Table = tableConstructor(1009, polynomialRollingHash);
+
+    CHECKERROR(Table != NULL && 
+               "Table can't be NULL pointer.", 
+               -1);
+
+    DOTHIS(hashFileWords(Words, Table));
+
+    char *output = stralloccat(filename, ".out");
+    DOTHIS(getStats(output, Table));
+    free(output);
+
+    tableReset(Table, passDestruction);
+
+    listDestructor(Words,  stringDestructor);
+
+    tableDestructor(Table, passDestruction);
 
     return 0;
 }
