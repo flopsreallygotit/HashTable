@@ -1,5 +1,4 @@
-#ifndef MAIN_UTILS_HPP
-#define MAIN_UTILS_HPP
+#pragma once
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -14,79 +13,59 @@
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-#include "listUtils.h"
-#include "textUtils.h"
-#include "universalUtils.h"
-
+#include "list.hpp"
 #include "hashFuncs.hpp"
+#include "textUtils.hpp"
+#include "universalUtils.hpp"
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-typedef struct table
+typedef struct hashTable
 {
-    size_t tableSize = 0;
+    size_t hashTableSize = 0;
     size_t (*hashFunction) (elem_t element);
 
-    list **listArray = NULL;
-} table;
+    list_t *listArray = NULL;
+} hashTable;
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-/// @brief  Create hash table
-/// @param  tableSize Size of hash table / Number of lists array
-/// @param  hashFunction Hash function for pasting, deletion and searching elements in table
-/// @return Pointer to table struct
+/// @brief Create hash table
+/// @param tableSize Size of hash table / Number of lists array
+/// @param hashFunction Hash function for pasting, deletion and searching elements in hashTable
+/// @param elementDestructor Function that deallocates memory allocated for element
 
-table *tableConstructor (size_t tableSize, 
-                         size_t (*hashFunction) (char *string));
+void hashTableConstructor (hashTable *table, size_t hashTableSize, 
+                           size_t (*hashFunction) (char *string),
+                           void (*elementDestructor) (elem_t element));
 
-/// @brief Deletes table.
-/// @param Table Pointer to table struct.
-/// @param elementDestructor Function that deletes element.
+/// @brief Delete hash table
 
-void tableDestructor (table *Table, 
-                      void (*elementDestructor) (elem_t element));
+void tableDestructor (hashTable *table);
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-/// @brief Dumps all table lists.
-/// @param Table Pointer to table struct.
+/// @brief  Insert element in hash table
+/// @return True if insert ended with success and false if element is already in hash table
 
-void simpleTableDump (table *Table);
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-/// @brief  Inserts element in hash table.
-/// @param  Table Pointer to table struct.
-/// @param  element Element.
-/// @return True if insert ended with success and false if element is already in table.
-
-bool tableInsert (table *Table, elem_t element);
+bool tableInsert (hashTable *table, elem_t element);
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-/// @brief  Creates list with words from file.
-/// @param  filename Name of file.
-/// @return List with words.
+/// @brief Fill list with words from file
 
-list *getFileWords (const char *filename);
+void fillWordsFromFile (list_t *words, const char *filename);
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-/// @brief Puts words in the file in hash table.
-/// @param Words List of words.
-/// @param Table Pointer to table struct.
+/// @brief Put words in the file in hash table
 
-ISERROR hashFileWords (list *Words, table *Table);
+ISERROR hashFileWords (list_t *words, hashTable *table);
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-/// @brief Outputs size of lists in file for subsequent processing.
-/// @param filename Name of file.
-/// @param Table Pointer to table struct.
+/// @brief Output size of lists in file for subsequent processing
 
-ISERROR getStats (const char *filename, table *Table);
+ISERROR getStats (const char *filename, hashTable *table);
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-#endif

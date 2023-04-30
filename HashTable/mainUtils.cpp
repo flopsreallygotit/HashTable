@@ -2,98 +2,71 @@
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-table *tableConstructor (size_t tableSize, 
-                         size_t (*hashFunction) (char *string))
+void hashTableConstructor (hashTable *table, size_t hashTableSize, 
+                           size_t (*hashFunction) (char *string),
+                           void (*elementDestructor) (elem_t element))
 {
-    table *Table = (table *) calloc (1, sizeof(table));
+    CHECKERROR(table != NULL &&
+               "Table pointer can't be NULL.",
+               (void) NULL);
 
-    CHECKERROR(Table != NULL &&
-               "Can't allocate memory for table.", 
-               NULL);
+    CHECKERROR(hashFunction != NULL &&
+               "Hash function pointer can't be NULL.",
+               (void) NULL);
 
-    Table->tableSize    = tableSize;
-    Table->hashFunction = hashFunction;
+    CHECKERROR(elementDestructor != NULL &&
+               "Element destructor function pointer can't be NULL.",
+               (void) NULL);
 
-    Table->listArray = (list **) calloc (tableSize, sizeof(list *));
+    table->hashTableSize = hashTableSize;
+    table->hashFunction  = hashFunction;
 
-    CHECKERROR(Table->listArray != NULL &&
-               "Can't allocate memory for list array.", 
-               NULL);
+    table->listArray = (list_t *) calloc (hashTableSize, sizeof(list_t));
 
-    for (size_t list_idx = 0; list_idx < tableSize; list_idx++)
-    {
-        Table->listArray[list_idx] = listConstructor();
+    CHECKERROR(table->listArray != NULL &&
+               "Can't allocate memory for list_t array.", 
+               (void) NULL);
 
-        CHECKERROR(Table->listArray[list_idx] != NULL && // TODO change naming.
-                   "Can't allocate memory for list array.", 
-                   NULL);
-    }
-
-    return Table;
+    for (size_t listIndex = 0; listIndex < hashTableSize; listIndex++)
+        listConstructor(&table->listArray[listIndex], elementDestructor);
+    
+    return;
 }
 
-void tableDestructor (table *Table, 
-                      void (*elementDestructor) (elem_t element))
+void tableDestructor (hashTable *table)
 {
-    if (Table == NULL)
-    {
-        PUTWARNING("Can't destroy NULL pointer.");
+    CHECKERROR(table != NULL &&
+               "Table pointer can't be NULL.",
+               (void) NULL);
 
-        return;
-    }
+    for (size_t listIndex = 0; listIndex < table->hashTableSize; ++listIndex)
+        listDestructor(&table->listArray[listIndex]);
 
-    for (size_t list_idx = 0; list_idx < Table->tableSize; ++list_idx)
-    {
-        listDestructor(Table->listArray[list_idx], 
-                       elementDestructor);
+    free(table->listArray);
 
-        Table->listArray[list_idx] = NULL;
-    }
+    *table = {
+                .hashTableSize = 0,
 
-    free(Table->listArray);
-    // *Table = {
-    //     .listArray = NULL,
-    //     .hashFunction ... // TODO
-    // };
-    Table->listArray = NULL;
-
-    Table->tableSize    = 0;
-    Table->hashFunction = NULL;
-
-    free(Table);
+                .hashFunction = NULL,
+                .listArray    = NULL,
+             };
 
     return;
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-void simpleTableDump (table *Table)
+bool tableInsert (hashTable *table, elem_t element)
 {
-    printf(BOLD MAGENTA "Table dump:\n" RESET);
-
-    for (size_t table_idx = 0; table_idx < Table->tableSize; table_idx++)
-    {
-        printf(BOLD MAGENTA "List number %lu:\n" RESET, table_idx);
-        
-        listDump(Table->listArray[table_idx]);
-    }
-
-    return;
-}
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-bool tableInsert (table *Table, elem_t element)
-{
-    CHECKERROR(Table != NULL && 
-               "Table can't be NULL pointer.", 
+    CHECKERROR(table != NULL &&
+               "Table pointer can't be NULL.",
                false);
 
-    size_t list_idx = Table->hashFunction(element) % Table->tableSize;
+    size_t listIndex = table->hashFunction(element) % table->hashTableSize;
 
-    if (listFind(Table->listArray[list_idx], element, stringComparator) == NULL)
+    if (listFind(&table->listArray[listIndex], element, stringComparator) == NULL)
     {
-        node *elementNodePointer = listInsert(Table->listArray[list_idx], element);
+        node_t *elementNodePointer = listInsert(&table->listArray[listIndex], element);
 
         CHECKERROR(elementNodePointer != NULL, false);
 
@@ -105,62 +78,51 @@ bool tableInsert (table *Table, elem_t element)
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-list *getFileWords (const char *filename) // TODO rename readWords...
+void fillWordsFromFile (list_t *words, const char *filename)
 {
+    CHECKERROR(words != NULL &&
+               "Words pointer can't be NULL.",
+               (void) NULL);    
+
     CHECKERROR(filename != NULL &&
                "Filename can't be NULL pointer.",
-               NULL);
+               (void) NULL);
 
-    text *Text = textConstructor(filename, false);  // Ritchie B allocator
-                                                    // Alexandresco cpp con std::allocator is the same to allocation as std::vector to vexation
-    CHECKERROR(Text  != NULL &&                     // Bryant
-               "Text can't be NULL pointer.",       // WARNING Knut vol.1 allocator
-               NULL);                               // TODO Text static
-                                                    // TODO google hash table               
-    list *Words = listConstructor();
+    listConstructor(words, stringDestructor);
 
-    CHECKERROR(Words != NULL &&
-               "Words can't be NULL pointer.",
-               NULL);
+    text_t text = {};
+    textConstructor(&text, filename, false);  
 
     int length = 0;
     char *word = NULL;
 
-    char *currentWordPointer = Text->buffer;
+    char *currentWordPointer = text.buffer;
 
     while (sscanf(currentWordPointer, "%ms%n", &word, &length) != EOF)
     {
-        node *wordPointer = listInsert(Words, word);
+        node_t *wordPointer = listInsert(words, word);
 
         CHECKERROR(wordPointer != NULL &&
                    "Can't insert word.",
-                   NULL);
+                   (void) NULL);
 
         currentWordPointer += length;
     }
 
-    textDestructor(Text);
+    textDestructor(&text);
 
-    return Words;
+    return;
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-ISERROR hashFileWords (list *Words, table *Table)
+ISERROR hashFileWords (list_t *words, hashTable *table)
 {
-    CHECKERROR(Words != NULL &&
-               "Words can't be NULL pointer.", 
-               NULLPOINTER);
-
-    CHECKERROR(Table != NULL &&
-               "Table can't be NULL pointer.", // TODO Rename files
-               NULLPOINTER);
-
-    node *currentNode = Words->head->next;
+    node_t *currentNode = words->head->next;
 
     while (currentNode != NULL)
     {
-        tableInsert(Table, currentNode->element);
+        tableInsert(table, currentNode->element);
 
         currentNode = currentNode->next;
     }
@@ -170,21 +132,21 @@ ISERROR hashFileWords (list *Words, table *Table)
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-ISERROR getStats (const char *filename, table *Table)
+ISERROR getStats (const char *filename, hashTable *table)
 {
-    CHECKERROR(filename != NULL &&
-               "Filename can't be NULL pointer.", 
+    CHECKERROR(table != NULL &&
+               "Table pointer can't be NULL.",
                NULLPOINTER);
 
-    CHECKERROR(Table != NULL &&
-               "Table can't be NULL pointer.", 
+    CHECKERROR(filename != NULL &&
+               "Filename pointer can't be NULL.", 
                NULLPOINTER);
 
     FILE *file = fopen(filename, "w");
 
-    for (size_t list_idx = 0; list_idx < Table->tableSize; list_idx++)
-        fprintf(file, "%lu\t%lu\n", 
-                list_idx, Table->listArray[list_idx]->size);
+    for (size_t listIndex = 0; listIndex < table->hashTableSize; listIndex++)
+         fprintf(file, "%lu\t%lu\n", 
+                 listIndex, table->listArray[listIndex].size);
 
     putc('\n', file);
 
@@ -194,3 +156,6 @@ ISERROR getStats (const char *filename, table *Table)
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// TODO Read about Google hash table optimization experience
+// TODO Read about allocator work: Knut vol.1, Ritchie, Alexandresco

@@ -1,12 +1,15 @@
-# Configure compiler.
+# Configure compiler
+
 CXX ?= clang++
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# Configure clang analyzer flags (if CXX = clang/clang++).
+# Configure clang analyzer flags (if CXX = clang/clang++)
+
 ANALYZER = # --analyzer
 
-# Configure compile flags.
+# Configure compile flags
+
 CXXFLAGS ?= -ggdb3 -std=c++17 -O0 -Wall -Wextra 							\
 			-Wmissing-declarations -Wcast-align -Wcast-qual 			   	\
 			-Wchar-subscripts -Wconditionally-supported 				   	\
@@ -25,41 +28,49 @@ CXXFLAGS ?= -ggdb3 -std=c++17 -O0 -Wall -Wextra 							\
 			-Wno-old-style-cast -Wno-varargs -Wstack-protector -fcheck-new 	\
 			-fsized-deallocation -fstack-protector -fstrict-overflow 	   	\
 			-flto-odr-type-merging -fno-omit-frame-pointer -pie -fPIE 	   	\
+			-fsanitize=address,leak											\
 
-# Configure linker flags.
-LINKFLAGS ?= -lsfml-graphics -lsfml-window -lsfml-system
+# Configure linker flags
 
-# Configure program perfomance boost flags.
+LINKFLAGS ?= -lasan
+
+# Configure program perfomance boost flags
+
 FASTFLAGS ?= # -Ofast -mavx -mavx2 -mavx512dq
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# Configure directory flags.
+# Configure directory flags
+
 DIRFLAGS ?= -IUniversal -IList
 
 # Configure sources you need to compile.
 SOURCES  ?= HashTable/main.cpp HashTable/mainUtils.cpp HashTable/hashFuncs.cpp	\
 			Universal/universalUtils.cpp Universal/textUtils.cpp				\
-			List/listUtils.cpp 													\
+			List/list.cpp List/listUtils.cpp									\
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# Configure object directory name.
+# Configure object directory name
+
 OBJDIR ?= ./Objects/
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# Pick executable name.
+# Pick executable name
+
 EXECUTABLE ?= main
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# WARNING: Don't change values and commands below.
+# WARNING: Don't change values and commands below
 
-# Making objects names from sources names.
+# Making objects names from sources names
+
 OBJECTS = $(patsubst %.cpp, $(OBJDIR)%.o, $(SOURCES)) 
 
-# Adding directory flags to compiler flags.
+# Adding directory flags to compiler flags
+
 CXXFLAGS += $(DIRFLAGS)
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

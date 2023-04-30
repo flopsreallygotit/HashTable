@@ -1,5 +1,4 @@
-#ifndef HASH_FUNCS_HPP
-#define HASH_FUNCS_HPP
+#pragma once
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -53,5 +52,3 @@ size_t rollingRightHash      (char *string);
 size_t polynomialRollingHash (char *string);
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-#endif
