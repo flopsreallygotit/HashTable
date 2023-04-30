@@ -32,10 +32,10 @@ typedef struct table
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-/// @brief Creates hash table.
-/// @param tableSize Size of hash table / Number of lists array.
-/// @param hashFunction Hash function for pasting, deletion and searching elements in table.
-/// @return Pointer to table struct.
+/// @brief  Create hash table
+/// @param  tableSize Size of hash table / Number of lists array
+/// @param  hashFunction Hash function for pasting, deletion and searching elements in table
+/// @return Pointer to table struct
 
 table *tableConstructor (size_t tableSize, 
                          size_t (*hashFunction) (char *string));

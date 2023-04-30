@@ -24,7 +24,7 @@ table *tableConstructor (size_t tableSize,
     {
         Table->listArray[list_idx] = listConstructor();
 
-        CHECKERROR(Table->listArray[list_idx] != NULL &&
+        CHECKERROR(Table->listArray[list_idx] != NULL && // TODO change naming.
                    "Can't allocate memory for list array.", 
                    NULL);
     }
@@ -42,7 +42,7 @@ void tableDestructor (table *Table,
         return;
     }
 
-    for (size_t list_idx = 0; list_idx < Table->tableSize; list_idx++)
+    for (size_t list_idx = 0; list_idx < Table->tableSize; ++list_idx)
     {
         listDestructor(Table->listArray[list_idx], 
                        elementDestructor);
@@ -51,6 +51,10 @@ void tableDestructor (table *Table,
     }
 
     free(Table->listArray);
+    // *Table = {
+    //     .listArray = NULL,
+    //     .hashFunction ... // TODO
+    // };
     Table->listArray = NULL;
 
     Table->tableSize    = 0;
@@ -65,7 +69,7 @@ void tableDestructor (table *Table,
 
 void simpleTableDump (table *Table)
 {
-    printf(BOLD "Table dump:\n" MAGENTA RESET);
+    printf(BOLD MAGENTA "Table dump:\n" RESET);
 
     for (size_t table_idx = 0; table_idx < Table->tableSize; table_idx++)
     {
@@ -101,18 +105,18 @@ bool tableInsert (table *Table, elem_t element)
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-list *getFileWords(const char *filename)
+list *getFileWords (const char *filename) // TODO rename readWords...
 {
     CHECKERROR(filename != NULL &&
                "Filename can't be NULL pointer.",
                NULL);
 
-    text *Text = textConstructor(filename, false);
-
-    CHECKERROR(Text  != NULL &&
-               "Text can't be NULL pointer.",
-               NULL);
-
+    text *Text = textConstructor(filename, false);  // Ritchie B allocator
+                                                    // Alexandresco cpp con std::allocator is the same to allocation as std::vector to vexation
+    CHECKERROR(Text  != NULL &&                     // Bryant
+               "Text can't be NULL pointer.",       // WARNING Knut vol.1 allocator
+               NULL);                               // TODO Text static
+                                                    // TODO google hash table               
     list *Words = listConstructor();
 
     CHECKERROR(Words != NULL &&
@@ -149,7 +153,7 @@ ISERROR hashFileWords (list *Words, table *Table)
                NULLPOINTER);
 
     CHECKERROR(Table != NULL &&
-               "Table can't be NULL pointer.", 
+               "Table can't be NULL pointer.", // TODO Rename files
                NULLPOINTER);
 
     node *currentNode = Words->head->next;

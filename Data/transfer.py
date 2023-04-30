@@ -1,8 +1,12 @@
 def deletePunctuation(word):
     return "".join([char if char.isalnum() else '' for char in word])
 
-inputFile  = open("data.txt")
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+inputFile  = open("fightCLub.txt")
 outputFile = open("fightClubWords.txt", "w")
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 words = set()
 
@@ -14,3 +18,5 @@ outputFile.writelines(words)
 
 outputFile.close()
 inputFile.close()
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

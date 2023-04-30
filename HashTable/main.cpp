@@ -6,20 +6,20 @@ int main (const int argc, const char **argv)
 {
     const char *filename = simpleCommandLineParser(argc, argv);
 
-    CHECKERROR(filename != NULL && 
-               "Filename can't be NULL pointer.", 
+    CHECKERROR(filename != NULL &&
+               "Filename can't be NULL pointer.",
                -1);
 
     list *Words = getFileWords(filename);
 
-    CHECKERROR(Words != NULL && 
-               "Words can't be NULL pointer.", 
+    CHECKERROR(Words != NULL &&
+               "Words can't be NULL pointer.",
                -1);
 
-    table *Table = tableConstructor(1009, constHash);
+    table *Table = tableConstructor(1009, polynomialRollingHash);
 
-    CHECKERROR(Table != NULL && 
-               "Table can't be NULL pointer.", 
+    CHECKERROR(Table != NULL &&
+               "Table can't be NULL pointer.",
                -1);
 
     DOTHIS(hashFileWords(Words, Table));

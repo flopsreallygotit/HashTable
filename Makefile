@@ -1,17 +1,19 @@
 # Configure compiler.
-CXX ?= g++
+CXX ?= clang++
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+# Configure clang analyzer flags (if CXX = clang/clang++).
+ANALYZER = # --analyzer
+
 # Configure compile flags.
-CXXFLAGS ?= -ggdb3 -std=c++17 -O0 -Wall -Wextra -Weffc++ 				   	\
-			-Waggressive-loop-optimizations -Wc++14-compat 				   	\
+CXXFLAGS ?= -ggdb3 -std=c++17 -O0 -Wall -Wextra 							\
 			-Wmissing-declarations -Wcast-align -Wcast-qual 			   	\
 			-Wchar-subscripts -Wconditionally-supported 				   	\
-			-Wconversion -Wctor-dtor-privacy -Wempty-body 				   	\
+			-Wconversion -Wempty-body 				   						\
 			-Wfloat-equal -Wformat-nonliteral -Wformat-security 		   	\
 			-Wformat-signedness -Wformat=2 -Winline -Wlogical-op 		   	\
-			-Wnon-virtual-dtor -Wopenmp-simd -Woverloaded-virtual 		   	\
+			-Wopenmp-simd -Woverloaded-virtual 		   						\
 			-Wpacked -Wpointer-arith -Winit-self -Wredundant-decls		   	\
 			-Wshadow -Wsign-conversion -Wsign-promo -Wstrict-null-sentinel	\
 			-Wstrict-overflow=2 -Wsuggest-attribute=noreturn			   	\
@@ -28,7 +30,7 @@ CXXFLAGS ?= -ggdb3 -std=c++17 -O0 -Wall -Wextra -Weffc++ 				   	\
 LINKFLAGS ?= -lsfml-graphics -lsfml-window -lsfml-system
 
 # Configure program perfomance boost flags.
-FASTFLAGS ?= -Ofast # -Ofast -mavx -mavx2 -mavx512dq
+FASTFLAGS ?= # -Ofast -mavx -mavx2 -mavx512dq
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -73,7 +75,7 @@ $(EXECUTABLE): $(OBJECTS)
 $(OBJDIR)%.o: %.cpp
 	@mkdir -p $(@D)
 	@echo "Making object file from $<;"
-	@$(CXX) -c $(CXXFLAGS) $(FASTFLAGS) $^ -o $@
+	@$(CXX) $(ANALYZER) -c $(CXXFLAGS) $(FASTFLAGS) $^ -o $@
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
