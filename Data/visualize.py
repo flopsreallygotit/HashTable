@@ -30,20 +30,27 @@ def parseHashTableStats (filename):
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-def visualizeStats (indexes, sizes, title):
+def visualizeStats (indexes, sizes, title, xLimits):
+    assert(len(indexes) == len(sizes))
+
     indexes = np.array(indexes)
     sizes   = np.array(sizes)
 
+    plt.xlim(xLimits)
+
     plt.bar(indexes, sizes,
             color = "purple",
-            label = "$D$ = " + str(np.var(sizes)))
+            label = "Dispersion: " + str(np.var(sizes)))
 
     plt.xlabel("List indexes")
     plt.ylabel("List sizes")
     plt.title(title)
     plt.legend()
 
-    plt.savefig(''.join([word.capitalize() for word in title.split()]) + ".png")
+    filename = ''.join([word.capitalize() for word in title.split()])
+
+    plt.savefig("Plots/" + filename + ".png", dpi = 300)
+    plt.clf()
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -57,12 +64,21 @@ titles = ["Const hash",                 \
           "ROR hash",                   \
           "Polynomial rolling hash"]
 
+xLimits = [[0, 10],     \
+           [40, 130],   \
+           [0, 50],     \
+           [0, 1009],   \
+           [0, 1009],   \
+           [0, 1009],   \
+           [0, 1009]]
+
 hashFunctionCount = len(indexes)
 assert(hashFunctionCount == len(sizes))
 
 for hashFunctionIndex in range(hashFunctionCount):
     visualizeStats(indexes[hashFunctionIndex], \
                    sizes[hashFunctionIndex],   \
-                   titles[hashFunctionIndex])
+                   titles[hashFunctionIndex],
+                   xLimits[hashFunctionIndex])
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

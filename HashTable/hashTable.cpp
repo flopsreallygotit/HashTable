@@ -138,17 +138,15 @@ ISERROR hashFileWords (list_t *words, hashTable *table)
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-ISERROR getStats (const char *filename, hashTable *table)
+ISERROR hashTableDump (FILE *file, hashTable *table)
 {
     CHECKERROR(table != NULL &&
                "Table pointer can't be NULL.",
                NULLPOINTER);
 
-    CHECKERROR(filename != NULL &&
-               "Filename pointer can't be NULL.", 
+    CHECKERROR(file != NULL &&
+               "File pointer can't be NULL.", 
                NULLPOINTER);
-
-    FILE *file = fopen(filename, "w");
 
     for (size_t listIndex = 0; listIndex < table->hashTableSize; listIndex++)
          fprintf(file, "%lu\t%lu\n", 
@@ -156,7 +154,34 @@ ISERROR getStats (const char *filename, hashTable *table)
 
     putc('\n', file);
 
-    fclose(file);
+    return NOTERROR;
+}
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ISERROR researchHashFunctions (const char *filename, list_t *words,
+                               size_t (*hashFunctions[])(elem_t element))
+{
+    FILE *output = fopen(filename, "w");
+
+    CHECKERROR(output != NULL &&
+               "Can't open output file.",
+               WRONGFILE);
+
+    hashTable table = {};
+    for (int hashFunctionIndex = 0; hashFunctionIndex < 7; hashFunctionIndex++)
+    {
+        hashTableConstructor(&table, 1009, 
+                            hashFunctions[hashFunctionIndex],
+                            passDestruction);
+
+        hashFileWords(words,  &table);
+        hashTableDump(output, &table);
+        
+        tableDestructor(&table);
+    }
+
+    fclose(output);
 
     return NOTERROR;
 }
@@ -165,3 +190,4 @@ ISERROR getStats (const char *filename, hashTable *table)
 
 // TODO Read about Google hash table optimization experience
 // TODO Read about allocator work: Knut vol.1, Ritchie, Alexandresco
+// TODO Read about doubles in C

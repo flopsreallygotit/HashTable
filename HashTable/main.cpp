@@ -1,4 +1,8 @@
-#include "mainUtils.hpp"
+#include <malloc.h>
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+#include "hashTable.hpp"
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -13,23 +17,24 @@ int main (const int argc, const char **argv)
     list_t words = {};
     fillWordsFromFile(&words, filename);
 
-    hashTable table = {};
-    hashTableConstructor(&table, 1009, 
-                         constHash,
-                         passDestruction);
+    char *outputFilename = stralloccat(filename, ".out");
 
-    DOTHIS(hashFileWords(&words, &table));
+    CHECKERROR(outputFilename != NULL &&
+               "Can't allocate memory for output filename.",
+               ALLOCATIONERROR);
 
-    char *output = stralloccat(filename, ".out");
+    size_t (*hashFunctions[])(elem_t element) = 
+    {
+        constHash, firstCharAsciiHash,
+        stringLengthHash, charSumHash,
+        rollingLeftHash, rollingRightHash,
+        polynomialRollingHash
+    };
 
-    CHECKERROR(output != NULL &&
-               "Output filename string can't be NULL pointer.",
-               -1);
+    DOTHIS(researchHashFunctions(outputFilename, &words, hashFunctions));
 
-    DOTHIS(getStats(output, &table));
-    
-    free(output);
-    tableDestructor(&table);
+    free(outputFilename);
+
     listDestructor(&words);
 
     return 0;

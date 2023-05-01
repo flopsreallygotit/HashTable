@@ -11,15 +11,21 @@ size_t constHash             (char *string)
     return 1;
 }
 
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 size_t firstCharAsciiHash    (char *string)
 {
     return (size_t) string[0];
 }
 
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 size_t stringLengthHash      (char *string)
 {
     return strlen(string);
 }
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 size_t charSumHash           (char *string)
 {
@@ -37,9 +43,47 @@ size_t charSumHash           (char *string)
     return hash;
 }
 
-// size_t rollingLeftHash       (char *string);
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-// size_t rollingRightHash      (char *string);
+size_t rollingLeftHash       (char *string)
+{
+    size_t idx = 0;
+    size_t hash = 0;
+
+    while (string[idx] != '\0')
+    {
+        size_t firstPart  = hash << 1;
+        size_t secondPart = hash >> 31;
+
+        hash += (firstPart | secondPart) ^ (size_t) string[idx];
+
+        idx++;
+    }
+
+    return hash;
+}
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+size_t rollingRightHash      (char *string)
+{
+    size_t idx = 0;
+    size_t hash = 0;
+
+    while (string[idx] != '\0')
+    {
+        size_t firstPart  = hash >> 1;
+        size_t secondPart = hash << 31;
+
+        hash += (firstPart | secondPart) ^ (size_t) string[idx];
+
+        idx++;
+    }
+
+    return hash;
+}
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 size_t polynomialRollingHash (char *string)
 {
