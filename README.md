@@ -46,7 +46,7 @@ size_t constHash (const char *string)
 
 <details>
 <summary> <b> Distribution </b> </summary>
-![constHash](Data/Plots/constHash.png)
+<img src = Data/Plots/constHash.png>
 </details>
 
 Kinda fun, but it's the worst hash function I can imagine...
@@ -63,7 +63,7 @@ size_t firstCharAsciiHash (const char *string)
 
 <details>
 <summary> <b> Distribution </b> </summary>
-![firstCharAsciiCodeHash](Data/Plots/firstCharAsciiCodeHash.png)
+<img src = Data/Plots/firstCharAsciiCodeHash.png>
 </details>
 
 This function is better than previous and it can be used on small text. However, the large text doesn't give a chance to it.
@@ -80,7 +80,7 @@ size_t stringLengthHash (const char *string)
 
 <details>
 <summary> <b> Distribution </b> </summary>
-![stringLengthHash](Data/Plots/stringLengthHash.png)
+<img src = Data/Plots/stringLengthHash.png>
 </details>
 
 We have even more collisions on that function. English words are not very long as we can see.
@@ -102,7 +102,7 @@ size_t charSumHash (const char *string)
 
 <details>
 <summary> <b> Distribution </b> </summary>
-![charSumHash](Data/Plots/charSumHash.png)
+<img src = Data/Plots/charAsciiCodesSumHash.png>
 </details>
 
 Dispersion became slightly better (~*250*).
@@ -129,7 +129,7 @@ size_t rollingLeftHash (const char *string)
 
 <details>
 <summary> <b> Distribution </b> </summary>
-![rollingLeftHash](Data/Plots/rollingLeftHash.png)
+<img src = Data/Plots/rolHash.png>
 </details>
 
 Less dispersion - more search speed! (More speed to the God of the speed u-ha-ha-ha)
@@ -156,7 +156,7 @@ size_t rollingRightHash (const char *string)
 
 <details>
 <summary> <b> Distribution </b> </summary>
-![rollingRightHash](Data/Plots/rollingRightHash.png)
+<img src = Data/Plots/rorHash.png>
 </details>
 
 Interesting result: ROR's Dispersion is less than the ROL's Dispersion by ~*6* times. Usually the ROL's results are better. Apparently the sample has a big impact.
@@ -185,7 +185,7 @@ size_t polynomialRollingHash (const char *string)
 
 <details>
 <summary> <b> Distribution </b> </summary>
-![polynomialRollingHash](Data/Plots/polynomialRollingHash.png)
+<img src = Data/Plots/polynomialRollingHash.png>
 </details>
 
 It gives dispersion about ~*42*. Bingo! I will use this hash function for the next part, because it has a great potential for optimizations and small dispersion.
