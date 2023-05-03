@@ -1,6 +1,6 @@
 # Configure compiler
 
-CXX ?= clang++
+CXX ?= g++
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -28,11 +28,10 @@ CXXFLAGS ?= -ggdb3 -std=c++17 -O0 -Wall -Wextra 							\
 			-Wno-old-style-cast -Wno-varargs -Wstack-protector -fcheck-new 	\
 			-fsized-deallocation -fstack-protector -fstrict-overflow 	   	\
 			-flto-odr-type-merging -fno-omit-frame-pointer -pie -fPIE 	   	\
-			-fsanitize=address,leak											\
 
 # Configure linker flags
 
-LINKFLAGS ?= -lasan
+LINKFLAGS ?= # -lasan
 
 # Configure program perfomance boost flags
 
@@ -42,12 +41,14 @@ FASTFLAGS ?= # -Ofast -mavx -mavx2 -mavx512dq
 
 # Configure directory flags
 
-DIRFLAGS ?= -IUniversal -IList
+DIRFLAGS ?= -IUniversal -IList -IHashTable
 
-# Configure sources you need to compile.
-SOURCES  ?= HashTable/main.cpp HashTable/hashTable.cpp HashTable/hashFuncs.cpp	\
-			Universal/universalUtils.cpp Universal/textUtils.cpp				\
-			List/list.cpp List/listUtils.cpp									\
+# Configure sources you need to compile
+
+SOURCES  ?= main.cpp research.cpp 									\
+			HashTable/hashFuncs.cpp HashTable/hashTable.cpp			\
+			Universal/universalUtils.cpp Universal/textUtils.cpp	\
+			List/list.cpp List/listUtils.cpp						\
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

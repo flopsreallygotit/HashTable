@@ -11,7 +11,7 @@
 /// @param string Default zero terminated string.
 /// @return Index of string in table.
 
-size_t constHash             (char *string);
+size_t constHash             (const char *string);
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -19,7 +19,7 @@ size_t constHash             (char *string);
 /// @param string Default zero terminated string.
 /// @return Index of string in table.
 
-size_t firstCharAsciiHash    (char *string);
+size_t firstCharAsciiHash    (const char *string);
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -27,7 +27,7 @@ size_t firstCharAsciiHash    (char *string);
 /// @param string Default zero terminated string.
 /// @return Index of string in table.
 
-size_t stringLengthHash      (char *string);
+size_t stringLengthHash      (const char *string);
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -35,7 +35,7 @@ size_t stringLengthHash      (char *string);
 /// @param string Default zero terminated string.
 /// @return Index of string in table.
 
-size_t charSumHash           (char *string);
+size_t charSumHash           (const char *string);
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -43,7 +43,7 @@ size_t charSumHash           (char *string);
 /// @param string Default zero terminated string.
 /// @return Index of string in table.
 
-size_t rollingLeftHash       (char *string);
+size_t rollingLeftHash       (const char *string);
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -51,7 +51,7 @@ size_t rollingLeftHash       (char *string);
 /// @param string Default zero terminated string.
 /// @return Index of string in table.
 
-size_t rollingRightHash      (char *string);
+size_t rollingRightHash      (const char *string);
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -59,6 +59,6 @@ size_t rollingRightHash      (char *string);
 /// @param string Default zero terminated string.
 /// @return Index of string in table.
 
-size_t polynomialRollingHash (char *string);
+size_t polynomialRollingHash (const char *string);
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

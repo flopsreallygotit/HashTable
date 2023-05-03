@@ -6,58 +6,49 @@
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-size_t constHash             (char *string)
+size_t constHash             (const char *string)
 {
     return 1;
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-size_t firstCharAsciiHash    (char *string)
+size_t firstCharAsciiHash    (const char *string)
 {
     return (size_t) string[0];
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-size_t stringLengthHash      (char *string)
+size_t stringLengthHash      (const char *string)
 {
     return strlen(string);
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-size_t charSumHash           (char *string)
+size_t charSumHash           (const char *string)
 {
     size_t hash = 0;
 
-    size_t symbol_idx = 0;
-
-    while (string[symbol_idx] != '\0')
-    {
-        hash += (size_t) string[symbol_idx];
-
-        symbol_idx++;
-    }
-
+    for (size_t symbolIndex = 0; string[symbolIndex] != '\0'; symbolIndex++)
+        hash += (size_t) string[symbolIndex];
+    
     return hash;
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-size_t rollingLeftHash       (char *string)
+size_t rollingLeftHash       (const char *string)
 {
-    size_t idx = 0;
     size_t hash = 0;
 
-    while (string[idx] != '\0')
+    for (size_t symbolIndex = 0; string[symbolIndex] != '\0'; symbolIndex++)
     {
         size_t firstPart  = hash << 1;
         size_t secondPart = hash >> 31;
 
-        hash += (firstPart | secondPart) ^ (size_t) string[idx];
-
-        idx++;
+        hash += (firstPart | secondPart) ^ (size_t) string[symbolIndex];
     }
 
     return hash;
@@ -65,19 +56,16 @@ size_t rollingLeftHash       (char *string)
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-size_t rollingRightHash      (char *string)
+size_t rollingRightHash      (const char *string)
 {
-    size_t idx = 0;
     size_t hash = 0;
 
-    while (string[idx] != '\0')
+    for (size_t symbolIndex = 0; string[symbolIndex] != '\0'; symbolIndex++)
     {
         size_t firstPart  = hash >> 1;
         size_t secondPart = hash << 31;
 
-        hash += (firstPart | secondPart) ^ (size_t) string[idx];
-
-        idx++;
+        hash += (firstPart | secondPart) ^ (size_t) string[symbolIndex];
     }
 
     return hash;
@@ -85,20 +73,18 @@ size_t rollingRightHash      (char *string)
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-size_t polynomialRollingHash (char *string)
+size_t polynomialRollingHash (const char *string)
 {
     static const size_t power = 53;
 
-    size_t idx  = 0;
     size_t hash = 0;
     size_t currentPower = 1;
 
-    while (string[idx] != '\0')
+    for (size_t symbolIndex = 0; string[symbolIndex] != '\0'; symbolIndex++)
     {
-        hash += (size_t) string[idx] * currentPower;
+        hash += (size_t) string[symbolIndex] * currentPower;
 
         currentPower *= power;
-        idx++;
     }
 
     return hash;

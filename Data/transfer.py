@@ -8,7 +8,7 @@ def deletePunctuation(word):
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-inputFilename = "test.txt"
+inputFilename = "sherlockHolmes.txt"
 
 filenameParts = inputFilename.split('.')
 filenameParts.insert(1, "Words.")

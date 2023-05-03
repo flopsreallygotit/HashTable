@@ -1,16 +1,15 @@
 #include <stdlib.h>
-// #include <immintrin.h>
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #include "hashTable.hpp"
-#include "textUtils.hpp"
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 void hashTableConstructor (hashTable *table, size_t hashTableSize, 
-                           size_t (*hashFunction) (char *string),
-                           void (*elementDestructor) (elem_t element))
+                           size_t (*hashFunction) (elem_t element),
+                           void (*elementDestructor) (elem_t element),
+                           int  (*elementComparator) (elem_t element1, elem_t element2))
 {
     CHECKERROR(table != NULL &&
                "Table pointer can't be NULL.",
@@ -24,6 +23,10 @@ void hashTableConstructor (hashTable *table, size_t hashTableSize,
                "Element destructor function pointer can't be NULL.",
                (void) NULL);
 
+    CHECKERROR(elementComparator != NULL &&
+               "Element comparator function pointer can't be NULL.",
+               (void) NULL);
+
     table->hashTableSize = hashTableSize;
     table->hashFunction  = hashFunction;
 
@@ -34,7 +37,8 @@ void hashTableConstructor (hashTable *table, size_t hashTableSize,
                (void) NULL);
 
     for (size_t listIndex = 0; listIndex < hashTableSize; listIndex++)
-        listConstructor(&table->listArray[listIndex], elementDestructor);
+        listConstructor(&table->listArray[listIndex], 
+                        elementDestructor, elementComparator);
     
     return;
 }
@@ -70,7 +74,7 @@ bool tableInsert (hashTable *table, elem_t element)
 
     size_t listIndex = table->hashFunction(element) % table->hashTableSize;
 
-    if (listFind(&table->listArray[listIndex], element, stringComparator) == NULL)
+    if (listFind(&table->listArray[listIndex], element) == NULL)
     {
         node_t *elementNodePointer = listInsert(&table->listArray[listIndex], element);
 
@@ -83,111 +87,3 @@ bool tableInsert (hashTable *table, elem_t element)
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-void fillWordsFromFile (list_t *words, const char *filename)
-{
-    CHECKERROR(words != NULL &&
-               "Words pointer can't be NULL.",
-               (void) NULL);    
-
-    CHECKERROR(filename != NULL &&
-               "Filename can't be NULL pointer.",
-               (void) NULL);
-
-    listConstructor(words, stringDestructor);
-
-    text_t text = {};
-    textConstructor(&text, filename, false);  
-
-    int length = 0;
-    char *word = NULL;
-
-    char *currentWordPointer = text.buffer;
-
-    while (sscanf(currentWordPointer, "%ms%n", &word, &length) != EOF)
-    {
-        node_t *wordPointer = listInsert(words, word);
-
-        CHECKERROR(wordPointer != NULL &&
-                   "Can't insert word.",
-                   (void) NULL);
-
-        currentWordPointer += length;
-    }
-
-    textDestructor(&text);
-
-    return;
-}
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-ISERROR hashFileWords (list_t *words, hashTable *table)
-{
-    node_t *currentNode = words->head->next;
-
-    while (currentNode != NULL)
-    {
-        tableInsert(table, currentNode->element);
-
-        currentNode = currentNode->next;
-    }
-
-    return NOTERROR;
-}
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-ISERROR hashTableDump (FILE *file, hashTable *table)
-{
-    CHECKERROR(table != NULL &&
-               "Table pointer can't be NULL.",
-               NULLPOINTER);
-
-    CHECKERROR(file != NULL &&
-               "File pointer can't be NULL.", 
-               NULLPOINTER);
-
-    for (size_t listIndex = 0; listIndex < table->hashTableSize; listIndex++)
-         fprintf(file, "%lu\t%lu\n", 
-                 listIndex, table->listArray[listIndex].size);
-
-    putc('\n', file);
-
-    return NOTERROR;
-}
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-ISERROR researchHashFunctions (const char *filename, list_t *words,
-                               size_t (*hashFunctions[])(elem_t element))
-{
-    FILE *output = fopen(filename, "w");
-
-    CHECKERROR(output != NULL &&
-               "Can't open output file.",
-               WRONGFILE);
-
-    hashTable table = {};
-    for (int hashFunctionIndex = 0; hashFunctionIndex < 7; hashFunctionIndex++)
-    {
-        hashTableConstructor(&table, 1009, 
-                            hashFunctions[hashFunctionIndex],
-                            passDestruction);
-
-        hashFileWords(words,  &table);
-        hashTableDump(output, &table);
-        
-        tableDestructor(&table);
-    }
-
-    fclose(output);
-
-    return NOTERROR;
-}
-
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-// TODO Read about Google hash table optimization experience
-// TODO Read about allocator work: Knut vol.1, Ritchie, Alexandresco
-// TODO Read about doubles in C
