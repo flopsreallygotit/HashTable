@@ -65,7 +65,7 @@ ISERROR hashTableDump (FILE *file, hashTable *table)
                "File pointer can't be NULL.", 
                NULLPOINTER);
 
-    for (size_t listIndex = 0; listIndex < table->hashTableSize; listIndex++)
+    for (size_t listIndex = 0; listIndex < table->size; listIndex++)
          fprintf(file, "%lu\t%lu\n", 
                  listIndex, table->listArray[listIndex].size);
 
@@ -77,7 +77,7 @@ ISERROR hashTableDump (FILE *file, hashTable *table)
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 ISERROR researchHashFunctions (const char *filename, list_t *words,
-                               size_t (*hashFunctions[])(elem_t element))
+                               hashFunction_t hashFunctions[])
 {
     FILE *output = fopen(filename, "w");
 
@@ -86,9 +86,11 @@ ISERROR researchHashFunctions (const char *filename, list_t *words,
                WRONGFILE);
 
     hashTable table = {};
-    for (int hashFunctionIndex = 0; hashFunctionIndex < 7; hashFunctionIndex++) // TODO
+    for (size_t hashFunctionIndex = 0; 
+         hashFunctionIndex < HashFunctionsCount;
+         hashFunctionIndex++)
     {
-        hashTableConstructor(&table, 1009, 
+        hashTableConstructor(&table, HashTableSize, 
                             hashFunctions[hashFunctionIndex],
                             passDestruction, strcmp);
 

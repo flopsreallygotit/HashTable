@@ -4,10 +4,6 @@ CXX ?= g++
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-# Configure clang analyzer flags (if CXX = clang/clang++)
-
-ANALYZER = # --analyzer
-
 # Configure compile flags
 
 CXXFLAGS ?= -ggdb3 -std=c++17 -O0 -Wall -Wextra 							\
@@ -45,7 +41,7 @@ DIRFLAGS ?= -IUniversal -IList -IHashTable
 
 # Configure sources you need to compile
 
-SOURCES  ?= main.cpp research.cpp 									\
+SOURCES  ?= Research/main.cpp Research/research.cpp					\
 			HashTable/hashFuncs.cpp HashTable/hashTable.cpp			\
 			Universal/universalUtils.cpp Universal/textUtils.cpp	\
 			List/list.cpp List/listUtils.cpp						\
@@ -73,6 +69,7 @@ OBJECTS = $(patsubst %.cpp, $(OBJDIR)%.o, $(SOURCES))
 # Adding directory flags to compiler flags
 
 CXXFLAGS += $(DIRFLAGS)
+CXXFLAGS += $(FASTFLAGS)
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -87,7 +84,7 @@ $(EXECUTABLE): $(OBJECTS)
 $(OBJDIR)%.o: %.cpp
 	@mkdir -p $(@D)
 	@echo "Making object file from $<;"
-	@$(CXX) $(ANALYZER) -c $(CXXFLAGS) $(FASTFLAGS) $^ -o $@
+	@$(CXX) -c $(CXXFLAGS) $^ -o $@
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

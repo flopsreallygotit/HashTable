@@ -24,7 +24,7 @@ int main (const int argc, const char **argv)
                "Can't allocate memory for output filename.",
                ALLOCATIONERROR);
 
-    size_t (*hashFunctions[])(elem_t element) = 
+    hashFunction_t hashFunctions[] = 
     {
         constHash, firstCharAsciiHash,
         stringLengthHash, charSumHash,

@@ -4,14 +4,15 @@
 
 #include "list.hpp"
 #include "hashFuncs.hpp"
-#include "universalUtils.hpp"
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+typedef size_t (*hashFunction_t) (elem_t element);
+
 typedef struct hashTable
 {
-    size_t hashTableSize = 0;
-    size_t (*hashFunction) (elem_t element);
+    size_t size = 0;
+    hashFunction_t hashFunction;
 
     list_t *listArray = NULL;
 } hashTable;

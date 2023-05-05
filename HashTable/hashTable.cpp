@@ -3,11 +3,12 @@
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #include "hashTable.hpp"
+#include "universalUtils.hpp"
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-void hashTableConstructor (hashTable *table, size_t hashTableSize, 
-                           size_t (*hashFunction) (elem_t element),
+void hashTableConstructor (hashTable *table, size_t size, 
+                           hashFunction_t hashFunction,
                            void (*elementDestructor) (elem_t element),
                            int  (*elementComparator) (elem_t element1, elem_t element2))
 {
@@ -27,16 +28,16 @@ void hashTableConstructor (hashTable *table, size_t hashTableSize,
                "Element comparator function pointer can't be NULL.",
                (void) NULL);
 
-    table->hashTableSize = hashTableSize;
-    table->hashFunction  = hashFunction;
+    table->size = size;
+    table->hashFunction = hashFunction;
 
-    table->listArray = (list_t *) calloc (hashTableSize, sizeof(list_t));
+    table->listArray = (list_t *) calloc (size, sizeof(list_t));
 
     CHECKERROR(table->listArray != NULL &&
                "Can't allocate memory for list_t array.", 
                (void) NULL);
 
-    for (size_t listIndex = 0; listIndex < hashTableSize; listIndex++)
+    for (size_t listIndex = 0; listIndex < size; listIndex++)
         listConstructor(&table->listArray[listIndex], 
                         elementDestructor, elementComparator);
     
@@ -49,13 +50,13 @@ void tableDestructor (hashTable *table)
                "Table pointer can't be NULL.",
                (void) NULL);
 
-    for (size_t listIndex = 0; listIndex < table->hashTableSize; ++listIndex)
+    for (size_t listIndex = 0; listIndex < table->size; ++listIndex)
         listDestructor(&table->listArray[listIndex]);
 
     free(table->listArray);
 
     *table = {
-                .hashTableSize = 0,
+                .size = 0,
 
                 .hashFunction = NULL,
                 .listArray    = NULL,
@@ -72,7 +73,7 @@ bool tableInsert (hashTable *table, elem_t element)
                "Table pointer can't be NULL.",
                false);
 
-    size_t listIndex = table->hashFunction(element) % table->hashTableSize;
+    size_t listIndex = table->hashFunction(element) % table->size;
 
     if (listFind(&table->listArray[listIndex], element) == NULL)
     {

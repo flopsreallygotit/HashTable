@@ -3,6 +3,17 @@
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #include "hashTable.hpp"
+#include "universalUtils.hpp"
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+/// @brief Number of functions we'll research
+
+static const size_t HashFunctionsCount = 7;
+
+/// @brief Size of hash table
+
+static const size_t HashTableSize = 1009;
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -28,6 +39,6 @@ ISERROR hashTableDump (FILE *file, hashTable *table);
 /// @param hashFunctions Array of hash functions to research
 
 ISERROR researchHashFunctions (const char *filename, list_t *words,
-                               size_t (*hashFunctions[])(elem_t element));
+                               hashFunction_t hashFunctions[]);
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
