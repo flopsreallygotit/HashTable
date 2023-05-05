@@ -41,7 +41,7 @@ DIRFLAGS ?= -IUniversal -IList -IHashTable
 
 # Configure sources you need to compile
 
-SOURCES  ?= Research/main.cpp Research/research.cpp					\
+SOURCES  ?= Optimizations/main.cpp Optimizations/optimizations.cpp	\
 			HashTable/hashFuncs.cpp HashTable/hashTable.cpp			\
 			Universal/universalUtils.cpp Universal/textUtils.cpp	\
 			List/list.cpp List/listUtils.cpp						\
