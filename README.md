@@ -21,7 +21,7 @@ P.S. During the research, the CPU was not trotled. Average room temperature was 
 
 A hash table is a data structure that uses a hash function to keep track of where data is put. Each piece of information to be stored has a name, which is called a key. Each name is matched up to one piece of data called a value.
 
-There is always a possibility that two keys will have the same value. This is called collision. So we are going to use chain method to avoid it. More information about it can be found here: [Click!](https://www.geeksforgeeks.org/separate-chaining-collision-handling-technique-in-hashing/)
+There is always a possibility that two keys will have the same hash. This is called collision. So we are going to use chain method to avoid it. More information about it can be found here: [Click!](https://www.geeksforgeeks.org/separate-chaining-collision-handling-technique-in-hashing/)
 
 It looks like:
 
@@ -31,7 +31,7 @@ It is also important to mention that size of hash table is a prime number (*1009
 
 # First part. Choose your fighter.
 
-It’s obvious that the *more* collisions we have - the *slower* search of members we'll get. So we need to select the function with the least number of collisions of these:
+It’s obvious that the *more* collisions we have - the *slower* search of values we'll get. So we need to select the function with the least number of collisions of these:
 
 ### 1) constHash
 
