@@ -25,10 +25,10 @@ typedef struct hashTable
 /// @param elementDestructor Function that deallocates memory allocated for element
 /// @param elementComparator Function that returns difference sign of elem_t elements
 
-void hashTableConstructor (hashTable *table, size_t hashTableSize, 
-                           size_t (*hashFunction) (elem_t element),
-                           void (*elementDestructor) (elem_t element),
-                           int  (*elementComparator) (elem_t element1, elem_t element2));
+void tableConstructor (hashTable *table, size_t hashTableSize, 
+                       size_t (*hashFunction) (elem_t element),
+                       void (*elementDestructor) (elem_t element),
+                       int  (*elementComparator) (elem_t element1, elem_t element2));
 
 /// @brief Delete hash table
 
@@ -40,5 +40,9 @@ void tableDestructor (hashTable *table);
 /// @return True if insert ended with success and false if element is already in hash table
 
 bool tableInsert (hashTable *table, elem_t element);
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+bool tableFind (hashTable *table, elem_t element);
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

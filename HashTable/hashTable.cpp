@@ -7,10 +7,10 @@
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-void hashTableConstructor (hashTable *table, size_t size, 
-                           hashFunction_t hashFunction,
-                           void (*elementDestructor) (elem_t element),
-                           int  (*elementComparator) (elem_t element1, elem_t element2))
+void tableConstructor (hashTable *table, size_t size, 
+                       hashFunction_t hashFunction,
+                       void (*elementDestructor) (elem_t element),
+                       int  (*elementComparator) (elem_t element1, elem_t element2))
 {
     CHECKERROR(table != NULL &&
                "Table pointer can't be NULL.",
@@ -85,6 +85,21 @@ bool tableInsert (hashTable *table, elem_t element)
     }
 
     return false;
+}
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+bool tableFind (hashTable *table, elem_t element)
+{
+    CHECKERROR(table != NULL &&
+               "Table pointer can't be NULL.",
+               false);
+
+    size_t listIndex = table->hashFunction(element) % table->size;
+
+    node_t *elementNodePointer = listFind(&table->listArray[listIndex], element);
+
+    return elementNodePointer != NULL;
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

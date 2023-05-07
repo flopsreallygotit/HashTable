@@ -1,7 +1,4 @@
-HashTable/*.o
-Universal/*.o
-List/*.o
-
+Out
 Objects
 main
 

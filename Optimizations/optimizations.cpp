@@ -41,11 +41,48 @@ void fillWordsFromFile (list_t *words, const char *filename)
 
 ISERROR hashFileWords (list_t *words, hashTable *table)
 {
+    CHECKERROR(words != NULL &&
+               "Words pointer can't be NULL.",
+               NULLPOINTER);    
+
+    CHECKERROR(table != NULL &&
+               "Table pointer can't be NULL.",
+               NULLPOINTER);   
+
     node_t *currentNode = words->head->next;
 
     while (currentNode != NULL)
     {
         tableInsert(table, currentNode->element);
+
+        currentNode = currentNode->next;
+    }
+
+    return NOTERROR;
+}
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ISERROR searchWordsInTable (list_t *words, hashTable *table)
+{
+    CHECKERROR(words != NULL &&
+               "Words pointer can't be NULL.",
+               NULLPOINTER);    
+
+    CHECKERROR(table != NULL &&
+               "Table pointer can't be NULL.",
+               NULLPOINTER);  
+
+    node_t *currentNode = words->head->next;
+
+    while (currentNode != NULL)
+    {
+        for (size_t currentSearchIndex = 0; 
+             currentSearchIndex < SearchLoopCount; 
+             currentSearchIndex++)
+        {
+            tableFind(table, currentNode->element);
+        }
 
         currentNode = currentNode->next;
     }
