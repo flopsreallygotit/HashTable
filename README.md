@@ -25,7 +25,7 @@ There is always a possibility that two keys will have the same hash. This is cal
 
 It looks like:
 
-// TODO Cringe picture meme with hash table dot png
+<img src = Data/hashTable.png>
 
 It is also important to mention that size of hash table is a prime number (*1009*), because on bad hash functions distribution will be better: [Why is it so?](https://ru.stackoverflow.com/questions/1470263/%D0%9E%D0%B1%D1%8F%D0%B7%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D0%BE-%D0%BB%D0%B8-%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C-%D0%BC%D0%B0%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9-%D1%80%D0%B0%D0%B7%D0%BC%D0%B5%D1%80-%D1%85%D1%8D%D1%88-%D1%82%D0%B0%D0%B1%D0%BB%D0%B8%D1%86%D1%8B-%D0%BF%D1%80%D0%BE%D1%81%D1%82%D1%8B%D0%BC-%D1%87%D0%B8%D1%81%D0%BB%D0%BE%D0%BC)
 
@@ -46,7 +46,7 @@ size_t constHash (const char *string)
 
 <details>
 <summary> <b> Distribution </b> </summary>
-<img src = Data/Plots/constHash.png>
+<img src = Data/constHash.png>
 </details>
 
 Kinda fun, but it's the worst hash function I can imagine...
@@ -63,7 +63,7 @@ size_t firstCharAsciiHash (const char *string)
 
 <details>
 <summary> <b> Distribution </b> </summary>
-<img src = Data/Plots/firstCharAsciiCodeHash.png>
+<img src = Data/firstCharAsciiCodeHash.png>
 </details>
 
 This function is better than previous and it can be used on small text. However, the large text doesn't give a chance to it.
@@ -80,7 +80,7 @@ size_t stringLengthHash (const char *string)
 
 <details>
 <summary> <b> Distribution </b> </summary>
-<img src = Data/Plots/stringLengthHash.png>
+<img src = Data/stringLengthHash.png>
 </details>
 
 We have even more collisions on that function. English words are not very long as we can see.
@@ -102,7 +102,7 @@ size_t charSumHash (const char *string)
 
 <details>
 <summary> <b> Distribution </b> </summary>
-<img src = Data/Plots/charAsciiCodesSumHash.png>
+<img src = Data/charAsciiCodesSumHash.png>
 </details>
 
 Dispersion became slightly better (~*250*).
@@ -129,7 +129,7 @@ size_t rollingLeftHash (const char *string)
 
 <details>
 <summary> <b> Distribution </b> </summary>
-<img src = Data/Plots/rolHash.png>
+<img src = Data/rolHash.png>
 </details>
 
 Less dispersion - more search speed! (More speed to the God of the speed u-ha-ha-ha)
@@ -156,7 +156,7 @@ size_t rollingRightHash (const char *string)
 
 <details>
 <summary> <b> Distribution </b> </summary>
-<img src = Data/Plots/rorHash.png>
+<img src = Data/rorHash.png>
 </details>
 
 Interesting result: ROR's Dispersion is less than the ROL's Dispersion by ~*6* times. Usually the ROL's results are better. Apparently the sample has a big impact.
@@ -185,7 +185,7 @@ size_t polynomialRollingHash (const char *string)
 
 <details>
 <summary> <b> Distribution </b> </summary>
-<img src = Data/Plots/polynomialRollingHash.png>
+<img src = Data/polynomialRollingHash.png>
 </details>
 
 It gives dispersion about ~*42*. Bingo! I will use this hash function for the next part, because it has a great potential for optimizations and small dispersion.
