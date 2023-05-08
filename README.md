@@ -2,12 +2,28 @@
 
 For average hash table enjoyers.
 
-P.S. Check other branches for source code. // TODO links for branches
+[First part source code](https://github.com/flopsreallygotit/HashTable/tree/firstPart)
+
+[Second part source code](https://github.com/flopsreallygotit/HashTable/tree/secondPart)
+
+# Introduction
+
+A hash table is an abstract data type that maps keys set to values set using hash function.
+
+However, there is a disadvantage, which is that two keys can have the same hash. This is called collision. So we are going to use chain method to avoid it. More information about it can be found here: [Click!](https://www.geeksforgeeks.org/separate-chaining-collision-handling-technique-in-hashing/)
+
+It can be represented in the following form:
+
+<p align="center">
+<img src = Data/hashTable.png>
+</p>
+
+It is also important to mention that size of hash table is a prime number: [Why is it so?](https://ru.stackoverflow.com/questions/1470263/%D0%9E%D0%B1%D1%8F%D0%B7%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D0%BE-%D0%BB%D0%B8-%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C-%D0%BC%D0%B0%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9-%D1%80%D0%B0%D0%B7%D0%BC%D0%B5%D1%80-%D1%85%D1%8D%D1%88-%D1%82%D0%B0%D0%B1%D0%BB%D0%B8%D1%86%D1%8B-%D0%BF%D1%80%D0%BE%D1%81%D1%82%D1%8B%D0%BC-%D1%87%D0%B8%D1%81%D0%BB%D0%BE%D0%BC)
 
 # Overview
 
 **Goals of this project:**
-- Research the properties of hash functions and choose the best of them, depending on collisions number;
+- Research the properties of hash functions and choose the best of them, depending on distribution;
 - Implement different types of assembly optimizations to speed up the searching process.
 
 **Technical parameters:**
@@ -15,22 +31,10 @@ P.S. Check other branches for source code. // TODO links for branches
 - **CPU**: Intel Core i5 11300H (AVX instructions: AVX-512)
 - **Compiler**: g++ (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0
 - **Table size:** 1009
-- **Keys:** Words of __"The adventures of Sherlock Holmes"__ (*41935* words)
-- **Utilities:** Valgrind, Callgrind, Kcachegring 
+- **Keys set:** Words of __"The adventures of Sherlock Holmes"__ (*41935* unique words)
+- **Utilities used:** Valgrind, Callgrind, Kcachegring 
 
-P.S. During the research, the CPU was not trotled. Average room temperature was 21 degrees. // TODO CPU temps + hists
-
-# Theory reference
-
-A hash table is a data structure that uses a hash function to keep track of where data is put. Each piece of information to be stored has a name, which is called a key. Each name is matched up to one piece of data called a value.
-
-There is always a possibility that two keys will have the same hash. This is called collision. So we are going to use chain method to avoid it. More information about it can be found here: [Click!](https://www.geeksforgeeks.org/separate-chaining-collision-handling-technique-in-hashing/)
-
-It looks like:
-
-<img src = Data/hashTable.png>
-
-It is also important to mention that size of hash table is a prime number (*1009*), because on bad hash functions distribution will be better: [Why is it so?](https://ru.stackoverflow.com/questions/1470263/%D0%9E%D0%B1%D1%8F%D0%B7%D0%B0%D1%82%D0%B5%D0%BB%D1%8C%D0%BD%D0%BE-%D0%BB%D0%B8-%D0%B4%D0%B5%D0%BB%D0%B0%D1%82%D1%8C-%D0%BC%D0%B0%D0%BA%D1%81%D0%B8%D0%BC%D0%B0%D0%BB%D1%8C%D0%BD%D1%8B%D0%B9-%D1%80%D0%B0%D0%B7%D0%BC%D0%B5%D1%80-%D1%85%D1%8D%D1%88-%D1%82%D0%B0%D0%B1%D0%BB%D0%B8%D1%86%D1%8B-%D0%BF%D1%80%D0%BE%D1%81%D1%82%D1%8B%D0%BC-%D1%87%D0%B8%D1%81%D0%BB%D0%BE%D0%BC)
+P.S. Average CPU temperature was 27.9 $^0C$
 
 # First part. Choose your fighter.
 
@@ -49,7 +53,9 @@ size_t constHash (const char *string)
 
 <details>
 <summary> <b> Distribution </b> </summary>
-<img src = Data/constHash.png>
+<p align="center">
+<img src = Data/constHash.png style = "width: 65vw">
+</p>
 </details>
 
 Kinda fun, but it's the worst hash function I can imagine...
@@ -66,7 +72,9 @@ size_t firstCharAsciiHash (const char *string)
 
 <details>
 <summary> <b> Distribution </b> </summary>
-<img src = Data/firstCharAsciiCodeHash.png>
+<p align="center">
+<img src = Data/firstCharAsciiCodeHash.png style = "width: 65vw">
+</p>
 </details>
 
 This function is better than previous and it can be used on small text. However, the large text doesn't give a chance to it.
@@ -83,7 +91,9 @@ size_t stringLengthHash (const char *string)
 
 <details>
 <summary> <b> Distribution </b> </summary>
-<img src = Data/stringLengthHash.png>
+<p align="center">
+<img src = Data/stringLengthHash.png style = "width: 65vw">
+</p>
 </details>
 
 We have even more collisions on that function. English words are not very long as we can see.
@@ -105,7 +115,9 @@ size_t charSumHash (const char *string)
 
 <details>
 <summary> <b> Distribution </b> </summary>
-<img src = Data/charAsciiCodesSumHash.png>
+<p align="center">
+<img src = Data/charAsciiCodesSumHash.png style = "width: 65vw">
+</p>
 </details>
 
 Dispersion became slightly better (~*250*).
@@ -132,7 +144,9 @@ size_t rollingLeftHash (const char *string)
 
 <details>
 <summary> <b> Distribution </b> </summary>
-<img src = Data/rolHash.png>
+<p align="center">
+<img src = Data/rolHash.png style = "width: 65vw">
+</p>
 </details>
 
 Less dispersion - more search speed! (More speed to the God of the speed u-ha-ha-ha)
@@ -159,7 +173,9 @@ size_t rollingRightHash (const char *string)
 
 <details>
 <summary> <b> Distribution </b> </summary>
-<img src = Data/rorHash.png>
+<p align="center">
+<img src = Data/rorHash.png style = "width: 65vw">
+</p>
 </details>
 
 Interesting result: ROR's Dispersion is less than the ROL's Dispersion by ~*6* times. Usually the ROL's results are better. Apparently the sample has a big impact.
@@ -188,7 +204,9 @@ size_t polynomialRollingHash (const char *string)
 
 <details>
 <summary> <b> Distribution </b> </summary>
-<img src = Data/polynomialRollingHash.png>
+<p align="center">
+<img src = Data/polynomialRollingHash.png style = "width: 65vw">
+</p>
 </details>
 
 It gives dispersion about ~*42*. Bingo! I will use this hash function for the next part, because it has a great potential for optimizations and small dispersion.
@@ -197,7 +215,7 @@ It gives dispersion about ~*42*. Bingo! I will use this hash function for the ne
 
 We have already selected hash function, so now we need to consider ways to speed up hash table. 
 
-We will use **valgrind** with **callgrind** tool and **kcachegrind** for callgrind output vizualizing ([Documentation](https://kcachegrind.sourceforge.net/html/Documentation.html)).
+We will use [**valgrind**](https://valgrind.org/docs/manual/QuickStart.html) with [**callgrind**](https://valgrind.org/docs/manual/cl-manual.html) tool and [**kcachegrind**](https://kcachegrind.sourceforge.net/html/Documentation.html) for callgrind output vizualization.
 
 P.S. All measurements are made 4 times for better accuracy.
 
@@ -211,7 +229,9 @@ Let's take a look at baseline.
 
 Kcachegrind output:
 
-<img src = Data/baseline.png>
+<p align="center">
+<img src = Data/baseline.png style = "width: 65vw">
+</p>
 
 First we will try to use compiler optimization *-O2*, to boost our perfomance.
 
@@ -224,7 +244,9 @@ First we will try to use compiler optimization *-O2*, to boost our perfomance.
 
 Profiler data:
 
-<img src = Data/-o2.png>
+<p align="center">
+<img src = Data/-o2.png style = "width: 65vw">
+</p>
 
 As we see from profiler **__strcmp_avx2** is on first place in Self rating. So we need to optimize the element compare function (*strcmp*) to improve performance.
 
@@ -280,7 +302,9 @@ int strcmpASM (const char *string1, const char *string2)
 
 Profiler data:
 
-<img src = Data/-o2+strcmpASM.png>
+<p align="center">
+<img src = Data/-o2+strcmpASM.png style = "width: 65vw">
+</p>
 
 We see that our hash function is bottleneck now. Let's try to use our own hash function rewrited on assembler.
 
@@ -295,7 +319,9 @@ We see that our hash function is bottleneck now. Let's try to use our own hash f
 
 Profiler data:
 
-<img src = Data/-o2+strcmpASM+hashFunctionASM.png>
+<p align="center">
+<img src = Data/-o2+strcmpASM+hashFunctionASM.png style = "width: 65vw">
+</p>
 
 Let's see this:
 
@@ -371,7 +397,9 @@ As we can see this function slows down our program and profiler shows that it is
 
 Profiler data:
 
-<img src = Data/-o2+strcmpASM+hashFunctionAVX.png>
+<p align="center">
+<img src = Data/-o2+strcmpASM+hashFunctionAVX.png style = "width: 65vw">
+</p>
 
 <details>
 <summary> <b> Code </b> </summary>
