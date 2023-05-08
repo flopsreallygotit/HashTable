@@ -2,6 +2,8 @@
 
 For average hash table enjoyers.
 
+P.S. Check other branches for source code.
+
 # Overview
 
 **Goals of this project:**
