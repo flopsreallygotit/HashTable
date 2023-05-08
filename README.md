@@ -2,23 +2,23 @@
 
 For average hash table enjoyers.
 
-P.S. Check other branches for source code.
+P.S. Check other branches for source code. // TODO links for branches
 
 # Overview
 
 **Goals of this project:**
-- Investigate hash functions on number of collisions and choose the best of them;
-- Implement different types of assembly optimizations to speed up the searching function
+- Research the properties of hash functions and choose the best of them, depending on collisions number;
+- Implement different types of assembly optimizations to speed up the searching process.
 
 **Technical parameters:**
 
 - **CPU**: Intel Core i5 11300H (AVX instructions: AVX-512)
-- **Compiler**: g++
+- **Compiler**: g++ (Ubuntu 11.3.0-1ubuntu1~22.04) 11.3.0
 - **Table size:** 1009
 - **Keys:** Words of __"The adventures of Sherlock Holmes"__ (*41935* words)
-- **Utilities:** Valgrind, Callgrind, Kcachegring
+- **Utilities:** Valgrind, Callgrind, Kcachegring 
 
-P.S. During the research, the CPU was not trotled. Average room temperature was 21 degrees.
+P.S. During the research, the CPU was not trotled. Average room temperature was 21 degrees. // TODO CPU temps + hists
 
 # Theory reference
 
