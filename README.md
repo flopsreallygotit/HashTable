@@ -353,6 +353,8 @@ polynomialRollingHashASM:
         ret
 ```
 
+</details>
+
 As we can see this function slows down our program and profiler shows that it is still a bottleneck. Let's try to use AVX instructions for hash function optimization.
 
 ### 3 assembler optimization
