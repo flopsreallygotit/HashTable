@@ -11,6 +11,7 @@ For average hash table enjoyers.
 **Technical parameters:**
 
 - **CPU**: Intel Core i5 11300H (AVX instructions: AVX-512)
+- **Compiler**: g++
 - **Table size:** 1009
 - **Keys:** Words of __"The adventures of Sherlock Holmes"__ (*41935* words)
 - **Utilities:** Valgrind, Callgrind, Kcachegring
@@ -191,5 +192,7 @@ size_t polynomialRollingHash (const char *string)
 It gives dispersion about ~*42*. Bingo! I will use this hash function for the next part, because it has a great potential for optimizations and small dispersion.
 
 # Second part. Optimizations.
+
+### Baseline
 
 
