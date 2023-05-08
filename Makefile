@@ -31,7 +31,7 @@ LINKFLAGS ?= # -lasan
 
 # Configure program perfomance boost flags
 
-FASTFLAGS ?= # -Ofast -mavx -mavx2 -mavx512dq
+FASTFLAGS ?= -O2 -mavx512dq
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -41,10 +41,14 @@ DIRFLAGS ?= -IUniversal -IList -IHashTable
 
 # Configure sources you need to compile
 
-SOURCES  ?= Optimizations/main.cpp Optimizations/optimizations.cpp	\
-			HashTable/hashFuncs.cpp HashTable/hashTable.cpp			\
-			Universal/universalUtils.cpp Universal/textUtils.cpp	\
-			List/list.cpp List/listUtils.cpp						\
+SOURCES  ?= Optimizations/main.cpp Optimizations/optimizations.cpp Optimizations/optimizationUtils.cpp	\
+			HashTable/hashFuncs.cpp HashTable/hashTable.cpp												\
+			Universal/universalUtils.cpp Universal/textUtils.cpp										\
+			List/list.cpp List/listUtils.cpp	
+
+# Configure assember objects to link with			
+
+ASMOBJECTS ?= Optimizations/hashFunctions.o
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -74,11 +78,11 @@ CXXFLAGS += $(FASTFLAGS)
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .PHONY: all
-all: $(EXECUTABLE)
+all: $(ASSEMBLER) $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS)
 	@echo "Making executable from objects;"
-	@$(CXX) $(OBJECTS) -o $@ $(LINKFLAGS)
+	@$(CXX) $(CXXFLAGS) $(OBJECTS) $(ASMOBJECTS) -o $@ $(LINKFLAGS)
 	@echo "Done;"
 
 $(OBJDIR)%.o: %.cpp

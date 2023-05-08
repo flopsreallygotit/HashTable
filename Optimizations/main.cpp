@@ -3,6 +3,7 @@
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #include "optimizations.hpp"
+#include "optimizationUtils.hpp"
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -14,14 +15,18 @@ int main (const int argc, const char **argv)
                "Filename can't be NULL pointer.",
                -1);
 
+    elementComparator_t elementComparator = strcmpASM; // strcmp for baseline / -o2
+    hashFunction_t      hashFunction      = crc32AVX;  // polynomialRollingHash for baseline / -o2 / -o2 + strcmpASM
+
     list_t words = {};
-    listConstructor(&words, stringDestructor, strcmp);
+    listConstructor(&words, stringDestructor, elementComparator);
     fillWordsFromFile(&words, filename);
 
     hashTable table = {};
     tableConstructor(&table, HashTableSize, 
-                     polynomialRollingHash, 
-                     passDestruction, strcmp);
+                     hashFunction, 
+                     passDestruction, 
+                     elementComparator);
 
     hashFileWords(&words, &table);
 
